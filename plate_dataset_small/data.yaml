@@ -1,0 +1,15 @@
+path: /media/data/license_plate_recognition/plate_dataset_small
+train: train/images
+val: valid/images
+test: test/images
+
+
+names: 
+  0: license_plate
+
+roboflow:
+  workspace: copter-aslje
+  project: ysc
+  version: 6
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/copter-aslje/ysc/dataset/6

@@ -7,7 +7,7 @@ The code was made using easyocr, pytorch and opencv.
 The network used for object detection was Yolov8n.
 > This Project was inspired on this video https://www.youtube.com/watch?v=73REqZM1Fy0&t=964s
 
-## 🔨 Ajustes e melhorias 
+## 🔨 Future tasks
 The project is simple and has a lot of room for improvement, I think the next updates will be focused on this tasks:
 - [ ] Improve/change the training dataset
 - [ ] Retrain the network for more epochs

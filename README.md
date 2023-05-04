@@ -1,10 +1,10 @@
 # License-Plate-Recognition
-A personal project for detect and read car license plates from images or videos.
-The code was made using easyocr, pytorch and opencv.
-The network used for object detection was Yolov8n
-
 <img src="image/detection.png" alt="Project inference example">
 
+
+A personal project for detect and read car license plates from images or videos, the information read from the license is saved com a CSV file.
+The code was made using easyocr, pytorch and opencv.
+The network used for object detection was Yolov8n.
 > This Project was inspired on this video https://www.youtube.com/watch?v=73REqZM1Fy0&t=964s
 
 ## 🔨 Ajustes e melhorias 

@@ -35,6 +35,6 @@ python main.py
 ### Train
 If you would like to train the model in a small license plate dataset from Roboflow, run the following
 ```
-python main.py
+python train.py
 ```
 The training was made for 30 epochs only, the model has a lot of room for improvement and it is possible that the dataset is not general enough.

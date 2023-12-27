@@ -1,5 +1,10 @@
-ultralytics
+jupyter
 opencv-python
 easyocr
-torch 
 numpy
+Pillow
+
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch 
+torchvision
+ultralytics

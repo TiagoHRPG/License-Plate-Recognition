@@ -1,3 +1,7 @@
 runs
 *.cache
 plates.csv
+small_dataset_yolo/
+assets/plates/
+models/
+.gitignore

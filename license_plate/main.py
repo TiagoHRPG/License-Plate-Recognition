@@ -8,6 +8,7 @@ import utils
 
 
 def read_plate(plate, mode='all', debug=False):
+    reader = Reader()
     if mode == 'all':
         plate_text = reader.read_text(plate, debug)
         
@@ -25,7 +26,6 @@ def read_plate(plate, mode='all', debug=False):
     return plate_text
 
 
-
 def process_plate(plate, debug=False):
     """
     preprocess plate and read image.
@@ -40,50 +40,50 @@ def process_plate(plate, debug=False):
 
     return plate_text
 
-# cpu or gpu
-DEVICE = 0 if torch.cuda.is_available() else "cpu"
+def main():
+    # cpu or gpu
+    DEVICE = 0 if torch.cuda.is_available() else "cpu"
 
-# reader and model instances
-reader = Reader()
-net = YOLO("assets/best.pt")
+    # reader and model instances
+    
+    net = YOLO("assets/best.pt")
 
-# path to images 
-img_path = "assets/imgs"
+    # path to images 
+    img_path = "assets/imgs"
 
 
-detected_plates = net.predict(img_path, device=DEVICE)
-for detected_plate in detected_plates:
-    detected_plate = detected_plate.cpu().numpy()
+    detected_plates = net.predict(img_path, device=DEVICE)
+    for detected_plate in detected_plates:
+        detected_plate = detected_plate.cpu().numpy()
 
-    img = detected_plate.orig_img
+        img = detected_plate.orig_img
 
-    for i, box in enumerate(detected_plate.boxes.xyxy):
-        xmin, ymin, xmax, ymax = box
+        for i, box in enumerate(detected_plate.boxes.xyxy):
+            xmin, ymin, xmax, ymax = box
 
-        plate = img[int(ymin):int(ymax), int(xmin):int(xmax),:].copy()
+            plate = img[int(ymin):int(ymax), int(xmin):int(xmax),:].copy()
 
-        # draw rect on plate
-        img = cv2.rectangle(img, 
-                            (int(xmin), int(ymin)),
-                            (int(xmax), int(ymax)),
-                            (0, 255, 0),
-                            2)        
-        
-        plate_text = process_plate(plate)
+            # draw rect on plate
+            img = cv2.rectangle(img, 
+                                (int(xmin), int(ymin)),
+                                (int(xmax), int(ymax)),
+                                (0, 255, 0),
+                                2)        
+            
+            plate_text = process_plate(plate)
 
-        utils.save_results(plate_text.upper(), plate, "assets/plates/plates.csv", "assets/plates")
+            utils.save_results(plate_text.upper(), plate, "assets/plates/plates.csv", "assets/plates")
 
-        cv2.putText(img, 
-                    plate_text,
-                    (int(xmin), int(ymin-10)),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    0.5,
-                    (0, 255, 0),
-                    2)
-        
-        cv2.imshow("img", img)
-        cv2.waitKey()
+            cv2.putText(img, 
+                        plate_text,
+                        (int(xmin), int(ymin-10)),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.5,
+                        (0, 255, 0),
+                        2)
+            
+            cv2.imshow("img", img)
+            cv2.waitKey()
 
-del(net)
-del(reader)
-
+if __name__ == '__main__':
+    main()

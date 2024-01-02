@@ -7,4 +7,3 @@ def save_results(text, plate, csv_filename, folder_path):
     with open(csv_filename, mode="a", newline='') as f:
         csv_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([img_name, text])
-

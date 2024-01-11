@@ -6,8 +6,10 @@ from Reader import Reader
 import vision
 import utils
 
+import argparse
 
-def read_plate(plate, mode='all', debug=False):
+
+def read_plate(plate, debug, mode='all'):
     reader = Reader()
     if mode == 'all':
         plate_text = reader.read_text(plate, debug)
@@ -26,7 +28,7 @@ def read_plate(plate, mode='all', debug=False):
     return plate_text
 
 
-def process_plate(plate, debug=False):
+def process_plate(plate, debug, mode):
     """
     preprocess plate and read image.
     returns the text
@@ -36,23 +38,17 @@ def process_plate(plate, debug=False):
         cv2.imshow("preprocessing", plate)
         cv2.waitKey(0)
 
-    plate_text = read_plate(plate, 'char', debug)
+    plate_text = read_plate(plate, debug, mode)
 
     return plate_text
 
-def main():
+def main(args):
     # cpu or gpu
     DEVICE = 0 if torch.cuda.is_available() else "cpu"
-
-    # reader and model instances
-    
     net = YOLO("assets/best.pt")
 
-    # path to images 
-    img_path = "assets/imgs"
-
-
-    detected_plates = net.predict(img_path, device=DEVICE)
+    detected_plates = net.predict(args.input, device=DEVICE)
+    plates = []
     for detected_plate in detected_plates:
         detected_plate = detected_plate.cpu().numpy()
 
@@ -70,9 +66,9 @@ def main():
                                 (0, 255, 0),
                                 2)        
             
-            plate_text = process_plate(plate)
+            plate_text = process_plate(plate, args.debug, args.mode)
 
-            utils.save_results(plate_text.upper(), plate, "assets/plates/plates.csv", "assets/plates")
+            plates.append((plate_text.upper(), plate))
 
             cv2.putText(img, 
                         plate_text,
@@ -82,8 +78,20 @@ def main():
                         (0, 255, 0),
                         2)
             
-            cv2.imshow("img", img)
-            cv2.waitKey()
+            if args.debug:
+                cv2.imshow("img", img)
+                cv2.waitKey()
+
+    utils.save_results(plates, args.output)
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--input', default="assets/imgs", help="input images directory")
+    parser.add_argument('--output', default="assets/output", help="output directory")
+    parser.add_argument('--mode', default="char", choices=["char", "all"], help="Process mode (char or all)")
+    parser.add_argument('--debug', action="store_true", help="debug mode")
+
+
+    args = parser.parse_args()
+
+    main(args)

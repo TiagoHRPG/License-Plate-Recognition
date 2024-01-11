@@ -51,7 +51,7 @@ class Reader:
         
         return filtered_cnts
 
-    def read_text(self, plate, debug=False):
+    def read_text(self, plate):
         output = self.reader.readtext(plate, allowlist=STRINGLIST, min_size=60)
         plate_text = ""
 
